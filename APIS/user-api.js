@@ -183,6 +183,17 @@ userApi.post("/addtocart",expressErrorHandler(async (req,res,next)=>{
 }))
 
 
+//get products
+userApi.get("/getproducts/:username",expressErrorHandler(async(req,res,next)=>{
+
+    let userCartCollectionObject = req.app.get("userCartCollectionObject")
+
+    let un = req.params.username;
+    let cartObj = await userCartCollectionObject.findOne({username: un})
+    res.send({message: cartObj})
+}))
+
+
 
 
 

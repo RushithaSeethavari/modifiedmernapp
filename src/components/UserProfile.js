@@ -11,9 +11,30 @@ function UserProfile(){
 
     let [user,setUser]=useState('')
 
-    let [usercart,setUserCart]=useState('')
+    let [cartObj,setCartObj]=useState('')
 
-    let [products,setProducts]= useState('')
+    let [productObj,setProductsObj]= useState('')
+
+    console.log("product obj",productObj)
+
+    useEffect(()=>{
+        let username = localStorage.getItem("username")
+
+        axios.get(`/user/getproducts/${username}`)
+        .then(res=>{
+            setCartObj(res.data.message)
+            console.log(res.data.message)
+        })
+        .catch(err =>{
+            console.log("err in reading cart",err)
+            alert("something went wrong in getting cart")
+        })
+    },[productObj.model])
+
+
+
+
+
 
 
     //function to make post reqto usercart api
@@ -30,6 +51,7 @@ function UserProfile(){
          axios.post("/user/addtocart",newObj)
          .then(res=>{
              let responceObj=res.data
+             setProductsObj(productObj)
              alert(responceObj.message)
          })
          .catch(err=>{
@@ -66,13 +88,17 @@ function UserProfile(){
                 <Link to="/viewproducts" className="nav-link" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">View products</Link>
             </li>
             <li class="nav-item">
-                <Link to="/usercart" className="nav-link" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Cart</Link>
+                <Link to="/usercart" className="nav-link" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+                    <button className="btn btn-dark text-white">Cart
+                    <span className="badge bg-info m-1 text-dark">{cartObj && cartObj.products.length}</span>
+                    </button>
+                </Link>
             </li>
 
             </ul>
             <Switch>
             <Route path="/usercart">
-                <UserCart />
+                <UserCart cartObj={cartObj} setCartObj={setCartObj} />
             </Route>
             <Route path="/viewproducts">
                 <ViewProducts addProductToCart={addProductToCart} />

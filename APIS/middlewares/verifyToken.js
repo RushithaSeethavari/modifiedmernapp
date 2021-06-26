@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+require("dotenv").config()
 
 const checkToken=(req,res,next)=>{
     
@@ -8,7 +9,7 @@ const checkToken=(req,res,next)=>{
         next()
     }
     catch(err){
-       res.send({ message: err.message})
+       res.send({ message: "Auth failed"})
     }
 }
 

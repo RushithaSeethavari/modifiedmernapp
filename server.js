@@ -27,7 +27,7 @@ const mongoClient = require("mongodb").MongoClient;
 
 
 //db connection url
-const dburl=process.env.DATABASE_URL
+const dburl=process.env.DATABASE_URL;
 
 
 //connect with mongodb
@@ -61,7 +61,28 @@ mongoClient.connect(dburl, {useNewUrlParser:true,useUnifiedTopology:true},(err,c
 
 
 
+app.get('/*',(req,res)=>{
+    res.sendFile(path.join(__dirname,'./build/index.html'),function (err){
+        if(err){
+            res.status(500).send(err)
+        }
+    })
+})
+
+//handle invallid path
+app.use((req,res,next)=>{
+    res.send({message:`path ${req.url} is invalid`})
+})
+
+//handle errors
+app.use((err,req,res,next)=>{
+    console.log(err)
+    res.send({message:err.message})
+})
+
+
+
 
 //assign port
-const port=process.env.PORT||4000
+const port=process.env.PORT||4000;
 app.listen(port,()=>console.log(`server listening on port ${port}...`))
