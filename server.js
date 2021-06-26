@@ -63,5 +63,5 @@ mongoClient.connect(dburl, {useNewUrlParser:true,useUnifiedTopology:true},(err,c
 
 
 //assign port
-const port=process.env.PORT;
+const port=process.env.PORT||4000
 app.listen(port,()=>console.log(`server listening on port ${port}...`))
